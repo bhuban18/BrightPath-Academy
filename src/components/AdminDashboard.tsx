@@ -22,7 +22,9 @@ import {
   Sparkles,
   AlertTriangle,
   X,
-  FileSpreadsheet
+  FileSpreadsheet,
+  BookOpen,
+  GraduationCap
 } from 'lucide-react';
 import {
   Registration,
@@ -35,12 +37,17 @@ import {
   isSupabaseConfigured
 } from '../lib/supabase';
 import { ACADEMY_CONFIG } from '../config/academyConfig';
+import { AdminCurriculumManager } from './AdminCurriculumManager';
 
 interface AdminDashboardProps {
   onBackToWebsite: () => void;
+  onOpenStudentPortal?: (courseId?: string) => void;
 }
 
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToWebsite }) => {
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({
+  onBackToWebsite,
+  onOpenStudentPortal
+}) => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [adminEmail, setAdminEmail] = useState<string | null>(null);
@@ -58,7 +65,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToWebsite 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourseFilter, setSelectedCourseFilter] = useState('All');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
-  const [activeTab, setActiveTab] = useState<'registrations' | 'setup'>('registrations');
+  const [activeTab, setActiveTab] = useState<'registrations' | 'curriculum' | 'setup'>('registrations');
 
   // Modal for Viewing Full Record Details
   const [selectedRegistration, setSelectedRegistration] = useState<Registration | null>(null);
@@ -391,10 +398,36 @@ on public.registrations for delete to authenticated using (true);`;
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <button
               type="button"
-              onClick={() => setActiveTab(activeTab === 'registrations' ? 'setup' : 'registrations')}
+              onClick={() => setActiveTab('registrations')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                activeTab === 'registrations'
+                  ? 'bg-[#FF6B35] text-white font-bold shadow-xs'
+                  : 'bg-white/10 text-slate-200 hover:bg-white/20'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Registrations ({registrations.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('curriculum')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                activeTab === 'curriculum'
+                  ? 'bg-[#FF6B35] text-white font-bold shadow-xs'
+                  : 'bg-white/10 text-slate-200 hover:bg-white/20'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Curriculum & Materials</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('setup')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                 activeTab === 'setup'
                   ? 'bg-amber-500 text-slate-950 font-bold'
@@ -402,8 +435,20 @@ on public.registrations for delete to authenticated using (true);`;
               }`}
             >
               <Database className="w-3.5 h-3.5" />
-              <span>{activeTab === 'setup' ? 'View Registrations' : 'Setup & SQL'}</span>
+              <span>Supabase Setup</span>
             </button>
+
+            {onOpenStudentPortal && (
+              <button
+                type="button"
+                onClick={() => onOpenStudentPortal()}
+                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600/80 hover:bg-emerald-600 text-white transition-colors"
+                title="Launch Student Learning Portal"
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Student Portal</span>
+              </button>
+            )}
 
             <button
               type="button"
@@ -411,7 +456,7 @@ on public.registrations for delete to authenticated using (true);`;
               className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white/10 hover:bg-white/20 text-slate-200 transition-colors flex items-center gap-1"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Public Site</span>
+              <span className="hidden sm:inline">Public Site</span>
             </button>
 
             <button
@@ -420,7 +465,7 @@ on public.registrations for delete to authenticated using (true);`;
               className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-600/80 hover:bg-red-600 text-white transition-colors flex items-center gap-1"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
@@ -468,6 +513,12 @@ on public.registrations for delete to authenticated using (true);`;
               </div>
             </div>
           </div>
+        ) : activeTab === 'curriculum' ? (
+          /* CURRICULUM & STUDY MATERIALS MANAGER */
+          <AdminCurriculumManager
+            registrations={registrations}
+            onOpenStudentPortal={onOpenStudentPortal}
+          />
         ) : (
           /* REGISTRATIONS MANAGEMENT VIEW */
           <div className="space-y-6 text-left animate-in fade-in duration-150">

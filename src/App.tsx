@@ -19,35 +19,62 @@ import { Footer } from './components/Footer';
 import { StickyMobileBar } from './components/StickyMobileBar';
 import { FreelanceCustomizerModal } from './components/FreelanceCustomizerModal';
 import { AdminDashboard } from './components/AdminDashboard';
+import { StudentPortal } from './components/StudentPortal';
 import { ACADEMY_CONFIG } from './config/academyConfig';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'website' | 'admin'>('website');
+  const [currentView, setCurrentView] = useState<'website' | 'admin' | 'student-portal'>('website');
+  const [selectedPortalCourseId, setSelectedPortalCourseId] = useState<string>('jee-preparation');
   const [selectedCourseForEnquiry, setSelectedCourseForEnquiry] = useState<string>('');
   const [enquiryNote, setEnquiryNote] = useState<string>('');
   const [showGlobalWhatsAppNotice, setShowGlobalWhatsAppNotice] = useState(false);
 
-  // Sync view with URL hash (e.g. #admin)
+  // Sync view with URL hash (e.g. #admin, #student-portal)
   useEffect(() => {
     const handleHashChange = () => {
-      if (window.location.hash === '#admin') {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#admin') {
         setCurrentView('admin');
-      } else if (currentView === 'admin') {
+      } else if (hash.startsWith('#student-portal') || hash.startsWith('#portal')) {
+        const parts = hash.split('?course=');
+        if (parts[1]) {
+          setSelectedPortalCourseId(parts[1]);
+        }
+        setCurrentView('student-portal');
+      } else if (currentView === 'admin' || currentView === 'student-portal') {
         setCurrentView('website');
       }
     };
 
-    if (window.location.hash === '#admin') {
+    const initialHash = window.location.hash.toLowerCase();
+    if (initialHash === '#admin') {
       setCurrentView('admin');
+    } else if (initialHash.startsWith('#student-portal') || initialHash.startsWith('#portal')) {
+      const parts = initialHash.split('?course=');
+      if (parts[1]) {
+        setSelectedPortalCourseId(parts[1]);
+      }
+      setCurrentView('student-portal');
     }
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [currentView]);
 
   const openAdminPortal = () => {
     window.location.hash = '#admin';
     setCurrentView('admin');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openStudentPortal = (courseId?: string) => {
+    if (courseId) {
+      setSelectedPortalCourseId(courseId);
+      window.location.hash = `#student-portal?course=${encodeURIComponent(courseId)}`;
+    } else {
+      window.location.hash = '#student-portal';
+    }
+    setCurrentView('student-portal');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -111,18 +138,40 @@ export default function App() {
     }
   };
 
+  // If Student Portal is active, render StudentPortal
+  if (currentView === 'student-portal') {
+    return (
+      <StudentPortal
+        onBackToWebsite={backToWebsite}
+        initialCourseId={selectedPortalCourseId}
+      />
+    );
+  }
+
   // If Admin Portal is active, render Admin Dashboard
   if (currentView === 'admin') {
-    return <AdminDashboard onBackToWebsite={backToWebsite} />;
+    return (
+      <AdminDashboard
+        onBackToWebsite={backToWebsite}
+        onOpenStudentPortal={(courseId) => openStudentPortal(courseId)}
+      />
+    );
   }
 
   // Otherwise, render Public Website
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-[#191C1E] flex flex-col font-['Inter'] relative selection:bg-[#FF6B35]/20 selection:text-[#0F1E36]">
-      {/* Top Banner indicating registration system active */}
-      <div className="bg-[#0F1E36] text-white py-1.5 px-4 text-center text-[11px] font-medium border-b border-slate-700 flex items-center justify-center gap-2">
+      {/* Top Banner indicating registration system & student portal active */}
+      <div className="bg-[#0F1E36] text-white py-2 px-4 text-center text-[11px] font-medium border-b border-slate-700 flex flex-wrap items-center justify-center gap-2">
         <span className="text-[#FF6B35] font-bold">Admissions 2026–27:</span>
-        <span>Online Registration & Admin System Active</span>
+        <span>Online Registration & Student Learning Portal Active</span>
+        <span className="text-slate-500">|</span>
+        <button
+          onClick={() => openStudentPortal('jee-preparation')}
+          className="text-emerald-300 hover:text-white underline font-semibold cursor-pointer"
+        >
+          Student Learning Portal
+        </button>
         <span className="text-slate-500">|</span>
         <button
           onClick={openAdminPortal}
@@ -137,6 +186,7 @@ export default function App() {
         onEnquireClick={scrollToContact}
         onOpenWhatsApp={handleWhatsAppGeneral}
         onOpenAdmin={openAdminPortal}
+        onOpenStudentPortal={() => openStudentPortal()}
       />
 
       {/* Main Content Area */}
@@ -186,6 +236,7 @@ export default function App() {
             setEnquiryNote('');
           }}
           onOpenAdmin={openAdminPortal}
+          onOpenStudentPortal={(courseId) => openStudentPortal(courseId)}
         />
       </main>
 

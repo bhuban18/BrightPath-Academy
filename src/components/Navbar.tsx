@@ -6,9 +6,15 @@ interface NavbarProps {
   onEnquireClick: () => void;
   onOpenWhatsApp: () => void;
   onOpenAdmin: () => void;
+  onOpenStudentPortal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onEnquireClick, onOpenWhatsApp, onOpenAdmin }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onEnquireClick,
+  onOpenWhatsApp,
+  onOpenAdmin,
+  onOpenStudentPortal
+}) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -84,6 +90,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onEnquireClick, onOpenWhatsApp, 
 
           {/* Zone 3: Actions */}
           <div className="hidden sm:flex items-center gap-2.5 shrink-0">
+            {/* Student Learning Portal */}
+            <button
+              onClick={onOpenStudentPortal}
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#0F1E36] hover:text-white bg-slate-100 hover:bg-[#0F1E36] rounded-lg border border-slate-200 transition-colors whitespace-nowrap cursor-pointer shadow-xs"
+              title="Access Student Learning Portal (Lectures, Notes, Tests)"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-[#FF6B35]" />
+              <span>Student Portal</span>
+            </button>
+
             {/* Contact for Enquiries Trigger */}
             <button
               onClick={onEnquireClick}
@@ -158,6 +174,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onEnquireClick, onOpenWhatsApp, 
                   {link.label}
                 </a>
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  if (onOpenStudentPortal) onOpenStudentPortal();
+                }}
+                className="w-full text-left px-3 py-2.5 rounded-lg text-base font-semibold text-[#0F1E36] bg-slate-50 hover:bg-slate-100 transition-colors flex items-center gap-2"
+              >
+                <GraduationCap className="w-4 h-4 text-[#FF6B35]" />
+                <span>Student Learning Portal</span>
+              </button>
               <button
                 type="button"
                 onClick={() => {

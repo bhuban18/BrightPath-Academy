@@ -13,23 +13,28 @@ import {
   Loader2,
   Database,
   ShieldCheck,
-  Check
+  Check,
+  GraduationCap,
+  ArrowRight
 } from 'lucide-react';
 import { ACADEMY_CONFIG } from '../config/academyConfig';
 import { submitRegistration, isSupabaseConfigured, Registration } from '../lib/supabase';
+import { enrollStudentFromRegistration } from '../lib/studentAuth';
 
 interface ContactSectionProps {
   selectedCoursePreset?: string;
   enquiryNotePreset?: string;
   onClearPreset?: () => void;
   onOpenAdmin?: () => void;
+  onOpenStudentPortal?: (courseId: string) => void;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
   selectedCoursePreset = '',
   enquiryNotePreset = '',
   onClearPreset,
-  onOpenAdmin
+  onOpenAdmin,
+  onOpenStudentPortal
 }) => {
   const [studentName, setStudentName] = useState('');
   const [email, setEmail] = useState('');
@@ -396,6 +401,45 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                           : 'Admissions team notified. You may also connect on WhatsApp below.'}
                       </span>
                     </div>
+                  </div>
+
+                  {/* Immediate Course Learning Portal Access Card */}
+                  <div className="p-4 bg-gradient-to-br from-[#0F1E36] to-[#1E3A5F] rounded-xl text-white shadow-md border border-slate-700 space-y-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-lg bg-[#FF6B35]/20 flex items-center justify-center text-[#FF6B35] shrink-0">
+                        <GraduationCap className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6B35] block">
+                          Instant Learning Access
+                        </span>
+                        <h4 className="text-sm font-bold font-['Plus_Jakarta_Sans'] text-white">
+                          Your Student Portal & Course Materials Are Ready
+                        </h4>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      You are registered for <strong>{savedRegistration.course}</strong>. Access your video lectures, chapter notes, formula sheets, and computer-based mock tests immediately.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const student = enrollStudentFromRegistration(
+                          savedRegistration.student_name,
+                          savedRegistration.email,
+                          savedRegistration.phone,
+                          savedRegistration.course
+                        );
+                        if (onOpenStudentPortal) {
+                          onOpenStudentPortal(student.enrolledCourses[0] || 'jee-preparation');
+                        }
+                      }}
+                      className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#FF6B35] to-[#FA8A3C] hover:from-[#E8551F] hover:to-[#FF6B35] rounded-xl shadow-md transition-all cursor-pointer group"
+                    >
+                      <GraduationCap className="w-4 h-4" />
+                      <span>Launch {savedRegistration.course} Portal</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </button>
                   </div>
 
                   {/* Actions */}

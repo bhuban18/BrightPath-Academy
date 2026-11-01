@@ -154,3 +154,30 @@ If you run the website locally or before adding your Supabase keys:
   - **Email**: `admin@brightpathacademy.edu.in`
   - **Password**: `admin123`
 - Once you add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`, the application automatically switches to the live cloud database.
+
+---
+
+### 6. Student Learning Portal & Course Access Workflow
+
+BrightPath Academy includes a full-fledged Student Learning Portal with dedicated curriculum for all four academic tracks:
+1. **JEE Preparation (Main + Advanced)**
+2. **NEET Preparation (UG Medical)**
+3. **Class 11–12 Science (PCM/PCB)**
+4. **Class 9–10 Foundation & Olympiads**
+
+#### A. How the Enrollment Flow Works:
+1. When a student registers for a course (e.g. **JEE Preparation**), the registration confirmation screen displays an instant **"Launch JEE Preparation Portal"** button.
+2. Clicking this button immediately logs the student into their personalized learning dashboard and loads the JEE curriculum.
+3. Students can also click the **"Student Portal"** button in the website navbar or visit `#student-portal` at any time.
+
+#### B. Student Learning Dashboard Sections:
+- **My Courses**: Switch between enrolled programs or explore additional courses.
+- **Video Lectures**: Subject-wise (Physics, Chemistry, Mathematics, Biology) lectures with integrated video player, chapter breakdown, and lecture watch completion tracking.
+- **Study Notes**: Chapter-wise comprehensive theory summaries, key definitions, and printable/PDF options.
+- **Study Guides**: Formula sheets for rapid revision and interactive chapter revision checklists with live completion percentages.
+- **Practice & CBT Mock Tests**: Timed computer-based mock tests (+4/-1 marking scheme, question palette, countdown timer, instant score breakdown, and step-by-step solutions).
+- **Progress Tracking**: Real-time progress metric recording completed video hours, notes reviewed, and test performance.
+
+#### C. Admin Curriculum Manager:
+- In the Admin Dashboard (`#admin`), click **"Curriculum & Materials"** to inspect course subjects, view all video lectures and chapter notes, add custom video lecture links, and view registered students organized by course.
+

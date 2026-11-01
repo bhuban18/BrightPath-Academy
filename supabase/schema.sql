@@ -59,3 +59,34 @@ using (true);
 create index if not exists idx_registrations_created_at on public.registrations (created_at desc);
 create index if not exists idx_registrations_status on public.registrations (status);
 create index if not exists idx_registrations_course on public.registrations (course);
+
+-- ==============================================================================
+-- 8. Student Learning Portal & Course Enrollments Table (Optional for Cloud Auth)
+-- ==============================================================================
+create table if not exists public.student_enrollments (
+    id uuid primary key default gen_random_uuid(),
+    student_email text not null,
+    student_name text not null,
+    course_id text not null, -- 'jee-preparation', 'neet-preparation', etc.
+    enrolled_at timestamp with time zone default timezone('utc'::text, now()) not null,
+    watched_lecture_ids jsonb default '[]'::jsonb,
+    completed_checklist_ids jsonb default '[]'::jsonb,
+    test_scores jsonb default '{}'::jsonb
+);
+
+alter table public.student_enrollments enable row level security;
+
+-- Policy: Authenticated students can read their own enrollments
+create policy "Allow students to view their own enrollments"
+on public.student_enrollments
+for select
+to authenticated
+using (student_email = auth.jwt()->>'email');
+
+-- Policy: Admin can view and manage all enrollments
+create policy "Allow admins full access to enrollments"
+on public.student_enrollments
+for all
+to authenticated
+using (true);
+
