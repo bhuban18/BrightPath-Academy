@@ -83,7 +83,7 @@ export const FreelanceCustomizerModal: React.FC = () => {
                 <ul className="space-y-1 pl-4 list-disc text-slate-500">
                   <li>Institute Name: {ACADEMY_CONFIG.name}</li>
                   <li>Inquiry Desk: {ACADEMY_CONFIG.phoneDisplay}</li>
-                  <li>WhatsApp Configured: +{ACADEMY_CONFIG.whatsAppNumber} (Demo Mode)</li>
+                  <li>WhatsApp: {ACADEMY_CONFIG.whatsAppNumber ? `+${ACADEMY_CONFIG.whatsAppNumber}` : 'Pending configuration in academyConfig.ts'}</li>
                   <li>Courses: 4 Specialised Batches (Foundation, 11-12 Science, JEE, NEET)</li>
                 </ul>
               </div>

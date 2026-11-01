@@ -1,12 +1,13 @@
 import React from 'react';
-import { GraduationCap, Phone, Mail, MapPin, MessageSquare, ArrowUp } from 'lucide-react';
+import { GraduationCap, Phone, Mail, MapPin, MessageSquare, ArrowUp, Shield } from 'lucide-react';
 import { ACADEMY_CONFIG } from '../config/academyConfig';
 
 interface FooterProps {
   onEnquireClick: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onEnquireClick }) => {
+export const Footer: React.FC<FooterProps> = ({ onEnquireClick, onOpenAdmin }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -84,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({ onEnquireClick }) => {
               </li>
               <li>
                 <a href="#contact" className="hover:text-white transition-colors">
-                  Admissions Desk
+                  Course Registration
                 </a>
               </li>
             </ul>
@@ -128,13 +129,25 @@ export const Footer: React.FC<FooterProps> = ({ onEnquireClick }) => {
               Book Free Demo Class
             </button>
 
-            <a
-              href={`tel:${ACADEMY_CONFIG.phoneNumberRaw}`}
-              className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold text-slate-200 bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10"
+            <button
+              type="button"
+              onClick={onEnquireClick}
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold text-slate-200 bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10 cursor-pointer"
             >
               <Phone className="w-3.5 h-3.5 text-[#FF6B35]" />
               <span>{ACADEMY_CONFIG.phoneDisplay}</span>
-            </a>
+            </button>
+
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 text-xs font-semibold text-amber-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-amber-400/20"
+              >
+                <Shield className="w-3.5 h-3.5 text-amber-400" />
+                <span>Staff & Admin Portal</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -143,18 +156,29 @@ export const Footer: React.FC<FooterProps> = ({ onEnquireClick }) => {
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
             <span>© {new Date().getFullYear()} {ACADEMY_CONFIG.name}. All rights reserved.</span>
             <span className="hidden sm:inline text-slate-600">·</span>
-            <span className="text-slate-400">Fictional demonstration website designed for coaching institutes.</span>
+            <span className="text-slate-400">Persistent Course Registration & Management System.</span>
           </div>
 
-          <button
-            type="button"
-            onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors text-xs"
-            aria-label="Scroll back to top"
-          >
-            <span>Back to Top</span>
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-4">
+            {onOpenAdmin && (
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                className="hover:text-white transition-colors"
+              >
+                Admin Login
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors text-xs"
+              aria-label="Scroll back to top"
+            >
+              <span>Back to Top</span>
+              <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

@@ -52,12 +52,12 @@ export const ACADEMY_CONFIG = {
   subTagline: "Build strong concepts, develop confidence, and prepare for your academic goals with structured learning and personalised guidance.",
   
   // Contact details
-  phoneDisplay: "+91 98765 43210",
-  phoneNumberRaw: "+919876543210",
-  // International format for WhatsApp without '+' or spaces (e.g. 919876543210)
-  // Set to 'DEMO_NUMBER' or valid phone number
-  whatsAppNumber: "919876543210",
-  isDemoNumber: true, // Prompts user if this is sample demonstration number
+  phoneDisplay: "Contact us for enquiries",
+  phoneNumberRaw: "",
+  // International format for WhatsApp without '+' or spaces (e.g. your verified business number)
+  // Left blank until verified number is configured by website owner
+  whatsAppNumber: "",
+  isDemoNumber: true, // Prompts user that contact number is awaiting verification by owner
   email: "admissions@brightpathacademy.edu.in",
   address: "Plot 42, Academic Enclave, Near Metro Pillar 140, Model Town, New Delhi, 110009",
   workingHours: "Monday – Saturday: 8:00 AM – 8:00 PM | Sunday: 9:00 AM – 2:00 PM (Doubt Sessions)",

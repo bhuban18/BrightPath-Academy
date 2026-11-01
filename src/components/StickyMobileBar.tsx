@@ -14,14 +14,15 @@ export const StickyMobileBar: React.FC<StickyMobileBarProps> = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
       <div className="grid grid-cols-3 gap-2">
-        {/* Call Button */}
-        <a
-          href={`tel:${ACADEMY_CONFIG.phoneNumberRaw}`}
+        {/* Contact Button */}
+        <button
+          type="button"
+          onClick={onEnquireClick}
           className="flex items-center justify-center gap-1.5 py-2 px-2 text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
         >
           <Phone className="w-3.5 h-3.5 text-[#0F1E36]" />
-          <span>Call</span>
-        </a>
+          <span>Contact</span>
+        </button>
 
         {/* WhatsApp Button */}
         <button

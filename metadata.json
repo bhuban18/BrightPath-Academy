@@ -1,6 +1,6 @@
 {
   "name": "BrightPath Academy",
-  "description": "Production-ready coaching institute website for BrightPath Academy featuring courses, admissions, results, and WhatsApp enquiry integration.",
+  "description": "Production-ready coaching institute website and course registration system for BrightPath Academy featuring persistent database storage, email alerts, and secure admin dashboard.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
